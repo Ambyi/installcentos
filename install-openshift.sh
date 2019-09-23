@@ -93,6 +93,7 @@ yum install -y  wget git zile nano net-tools docker-1.13.1\
 				httpd-tools NetworkManager \
 				python-cryptography python2-pip python-devel  python-passlib \
 				java-1.8.0-openjdk-headless "@Development Tools"
+				
 
 #install epel
 #yum -y install epel-release
@@ -113,10 +114,13 @@ yum update -y
 yum -y --enablerepo=epel install pyOpenSSL
 yum update -y
 cd /tmp
-wget https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
+#wget https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
 ls *.rpm
 # curl -o ansible.rpm https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
-yum -y --enablerepo=epel install ansible.rpm
+#yum -y --enablerepo=epel install ansible.rpm
+yum remove ansible
+rpm -Uvh https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
+ansible --version
 yum update -y
 [ ! -d openshift-ansible ] && git clone https://github.com/openshift/openshift-ansible.git -b release-${VERSION} --depth=1
 
