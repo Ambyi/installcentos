@@ -14,6 +14,7 @@ export IP=${IP:="$(ip route get 8.8.8.8 | awk '{print $NF; exit}')"}
 export API_PORT=${API_PORT:="8443"}
 export LETSENCRYPT=${LETSENCRYPT:="false"}
 export MAIL=${MAIL:="example@email.com"}
+export DISK = "/var/lib/docker"
 
 ## Make the script interactive to set the variables
 if [ "$INTERACTIVE" = "true" ]; then
@@ -107,13 +108,16 @@ if [ $? -eq 1 ]; then
 	systemctl start NetworkManager
 	systemctl enable NetworkManager
 fi
-
+yum update -y
 # install the packages for Ansible
 yum -y --enablerepo=epel install pyOpenSSL
-
-curl -o ansible.rpm https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.6.5-1.el7.ans.noarch.rpm
+yum update -y
+cd /tmp
+wget https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
+ls *.rpm
+# curl -o ansible.rpm https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
 yum -y --enablerepo=epel install ansible.rpm
-
+yum update -y
 [ ! -d openshift-ansible ] && git clone https://github.com/openshift/openshift-ansible.git -b release-${VERSION} --depth=1
 
 cat <<EOD > /etc/hosts
