@@ -14,7 +14,7 @@ export IP=${IP:="$(ip route get 8.8.8.8 | awk '{print $NF; exit}')"}
 export API_PORT=${API_PORT:="8443"}
 export LETSENCRYPT=${LETSENCRYPT:="false"}
 export MAIL=${MAIL:="example@email.com"}
-export DISK = "/var/lib/docker"
+export DISK=${DISK:="/var/lib/docker"}
 
 ## Make the script interactive to set the variables
 if [ "$INTERACTIVE" = "true" ]; then
