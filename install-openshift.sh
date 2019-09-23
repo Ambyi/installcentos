@@ -98,7 +98,7 @@ yum install -y  wget git zile nano net-tools docker-1.13.1\
 yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 # Disable the EPEL repository globally so that is not accidentally used during later steps of the installation
 sed -i -e "s/^enabled=1/enabled=1" /etc/yum.repos.d/epel.repo
-
+yum install docker-1.13.1
 systemctl | grep "NetworkManager.*running" 
 if [ $? -eq 1 ]; then
 	systemctl start NetworkManager
