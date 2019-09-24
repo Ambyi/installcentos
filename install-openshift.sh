@@ -126,8 +126,8 @@ yum remove ansible
 rpm -Uvh https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
 ansible --version
 yum update -y
-[ ! -d openshift-ansible ] && git clone https://github.com/openshift/openshift-ansible.git -b release-${VERSION} --depth=1
-
+#[ ! -d openshift-ansible ] && git clone https://github.com/openshift/openshift-ansible.git -b release-${VERSION} --depth=1
+git clone https://github.com/openshift/openshift-ansible.git
 echo "******  openshift-ansible.git ${VERSION}  "
 
 cat <<EOD > /etc/hosts
@@ -175,13 +175,22 @@ if [ "$memory" -lt "16777216" ]; then
 	export LOGGING="False"
 fi
 
-curl -o inventory.download $SCRIPT_REPO/inventory.ini
-envsubst < inventory.download > inventory.ini
+
 
 echo "******  inventory.download $SCRIPT_REPO/inventory.ini ${SCRIPT_REPO}  "
 # add proxy in inventory.ini if proxy variables are set
 
-echo " # add proxy in inventory.ini if proxy variables are set${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}} "
+cd /tmp
+# wget https://github.com/Ambyi/installcentos/blob/master/inventory.ini
+# ls *.ini
+# curl -O $SCRIPT_REPO/inventory.ini
+#envsubst < inventory.download > inventory.ini
+
+sudo rm -r /tmp/inventory.ini
+
+cp /root/installcentos/inventory.ini /tmp/inventory.ini
+
+echo "*** # add proxy in inventory.ini if proxy variables are set${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}}**** "
 
 if [ ! -z "${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}}" ]; then
 	echo >> inventory.ini
@@ -197,8 +206,7 @@ if [ ! -z "${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}}" ]; then
 	echo "******************************************************************openshift_no_proxy=\"${__no_proxy}\"" 
 fi
 
-cd /tmp
-wget  https://github.com/Ambyi/installcentos/blob/master/inventory.ini
+
 
 
 # Let's Encrypt setup
@@ -240,9 +248,9 @@ wget  https://github.com/Ambyi/installcentos/blob/master/inventory.ini
 EOT
 	
 	# Add Cron Task to renew certificate
-	echo "@weekly  certbot renew --pre-hook=\"oc scale --replicas=0 dc router\" --post-hook=\"oc scale --replicas=1 dc router\"" > certbotcron
-	crontab certbotcron
-	rm certbotcron
+# 	echo "@weekly  certbot renew --pre-hook=\"oc scale --replicas=0 dc router\" --post-hook=\"oc scale --replicas=1 dc router\"" > certbotcron
+# 	crontab certbotcron
+# 	rm certbotcron
 #fi
 
 # Checkout Origin 3.11 release 
