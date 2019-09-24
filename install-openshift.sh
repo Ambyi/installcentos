@@ -231,8 +231,7 @@ fi
 	# Configure a Custom Wildcard Certificate for the Default Router
 	# Configure a Custom Certificate for the Image Registry
 	## See here for more explanation: https://docs.okd.io/latest/install_config/certificate_customization.html
-	echo "@@@@@@@@@git clone https://github.com/openshift/openshift-ansible.git###@@@@@@@@@@@"  
-	  git clone https://github.com/openshift/openshift-ansible.git
+	
 	echo "*****************************************************inventory.ini update**********************" 
 	cat <<EOT >> inventory.ini
 	
@@ -269,6 +268,12 @@ mkdir -p /etc/origin/master/
 chmod 777 /etc/origin/master
 touch /etc/origin/master/htpasswd
 	echo "*****************************************************start run ansible **********************" 
+	echo  ${PWD=pwd}
+	echo "@@@@@@@@@git clone https://github.com/openshift/openshift-ansible.git###@@@@@@@@@@@"  
+	cd /root/installcentos
+	echo  ${PWD=pwd}
+	  git clone https://github.com/openshift/openshift-ansible.git
+	  echo "*****************************************************start run ansible **********************" 
 	echo  ${PWD=pwd}
 	
 ansible-playbook -i inventory.ini openshift-ansible/playbooks/prerequisites.yml
