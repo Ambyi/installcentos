@@ -243,7 +243,7 @@ EOT
 	echo "@weekly  certbot renew --pre-hook=\"oc scale --replicas=0 dc router\" --post-hook=\"oc scale --replicas=1 dc router\"" > certbotcron
 	crontab certbotcron
 	rm certbotcron
-fi
+#fi
 
 # Checkout Origin 3.11 release 
 cd openshift-ansible && git fetch && git checkout release-3.11 && cd ..
