@@ -268,13 +268,13 @@ mkdir -p /etc/origin/master/
 chmod 777 /etc/origin/master
 touch /etc/origin/master/htpasswd
 	echo "*****************************************************start run ansible **********************" 
-	echo  ${PWD=pwd}
+	echo  ${PWD=pwd}  ${ip}
 	echo "@@@@@@@@@git clone https://github.com/openshift/openshift-ansible.git###@@@@@@@@@@@"  
 	#cd /root/installcentos
-	echo  ${PWD=pwd}
+	echo  ${PWD=pwd}  ${ip}
 	  #git clone https://github.com/openshift/openshift-ansible.git
 	  echo "*****************************************************start run ansible **********************" 
-	echo  ${PWD=pwd}
+	echo  ${PWD=pwd} ${ip}
 	
 ansible-playbook -i inventory.ini openshift-ansible/playbooks/prerequisites.yml
 ansible-playbook -i inventory.ini openshift-ansible/playbooks/deploy_cluster.yml
