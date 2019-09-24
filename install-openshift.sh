@@ -126,8 +126,8 @@ yum remove ansible
 rpm -Uvh https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
 ansible --version
 yum update -y
-[ ! -d openshift-ansible ] && git clone https://github.com/openshift/openshift-ansible.git -b release-${VERSION} --depth=1
-# git clone https://github.com/openshift/openshift-ansible.git
+# [ ! -d openshift-ansible ] && git clone https://github.com/openshift/openshift-ansible.git -b release-${VERSION} --depth=1
+
 echo "******  openshift-ansible.git ${VERSION}  "
 
 cat <<EOD > /etc/hosts
@@ -231,6 +231,8 @@ fi
 	# Configure a Custom Wildcard Certificate for the Default Router
 	# Configure a Custom Certificate for the Image Registry
 	## See here for more explanation: https://docs.okd.io/latest/install_config/certificate_customization.html
+	echo "@@@@@@@@@git clone https://github.com/openshift/openshift-ansible.git###@@@@@@@@@@@"  
+	  git clone https://github.com/openshift/openshift-ansible.git
 	echo "*****************************************************inventory.ini update**********************" 
 	cat <<EOT >> inventory.ini
 	
