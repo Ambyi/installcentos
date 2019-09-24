@@ -272,7 +272,7 @@ touch /etc/origin/master/htpasswd
 	echo "@@@@@@@@@git clone https://github.com/openshift/openshift-ansible.git###@@@@@@@@@@@"  
 	#cd /root/installcentos
 	echo  ${PWD=pwd}
-	  git clone https://github.com/openshift/openshift-ansible.git
+	  #git clone https://github.com/openshift/openshift-ansible.git
 	  echo "*****************************************************start run ansible **********************" 
 	echo  ${PWD=pwd}
 	
