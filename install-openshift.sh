@@ -180,6 +180,9 @@ envsubst < inventory.download > inventory.ini
 
 echo "******  inventory.download $SCRIPT_REPO/inventory.ini ${SCRIPT_REPO}  "
 # add proxy in inventory.ini if proxy variables are set
+
+echo " # add proxy in inventory.ini if proxy variables are set${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}} "
+
 if [ ! -z "${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}}" ]; then
 	echo >> inventory.ini
 	echo "openshift_http_proxy=\"${HTTP_PROXY:-${http_proxy:-${HTTPS_PROXY:-${https_proxy}}}}\"" >> inventory.ini
@@ -190,22 +193,28 @@ if [ ! -z "${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}}" ]; then
 		__no_proxy="${IP},.${DOMAIN}"
 	fi
 	echo "openshift_no_proxy=\"${__no_proxy}\"" >> inventory.ini
+	
+	echo "******************************************************************openshift_no_proxy=\"${__no_proxy}\"" 
 fi
 
-# Let's Encrypt setup
-if [ "$LETSENCRYPT" = true ] ; then
-	# Install CertBot
-	yum install --enablerepo=epel -y certbot
+cd /tmp
+wget  https://github.com/Ambyi/installcentos/blob/master/inventory.ini
 
-	# Configure Let's Encrypt certificate
-	certbot certonly --manual \
-			--preferred-challenges dns \
-			--email $MAIL \
-			--server https://acme-v02.api.letsencrypt.org/directory \
-			--agree-tos \
-			-d $DOMAIN \
-			-d *.$DOMAIN \
-			-d *.apps.$DOMAIN
+
+# Let's Encrypt setup
+# if [ "$LETSENCRYPT" = true ] ; then
+# 	# Install CertBot
+# 	yum install --enablerepo=epel -y certbot
+
+# 	# Configure Let's Encrypt certificate
+# 	certbot certonly --manual \
+# 			--preferred-challenges dns \
+# 			--email $MAIL \
+# 			--server https://acme-v02.api.letsencrypt.org/directory \
+# 			--agree-tos \
+# 			-d $DOMAIN \
+# 			-d *.$DOMAIN \
+# 			-d *.apps.$DOMAIN
 	
 	## Modify inventory.ini 
 	# Declare usage of Custom Certificate
@@ -235,6 +244,14 @@ EOT
 	crontab certbotcron
 	rm certbotcron
 fi
+
+# Checkout Origin 3.11 release 
+cd openshift-ansible && git fetch && git checkout release-3.11 && cd ..
+# -----------------------------------------------------
+# # confirm selinux setting on Master,Compute,Infra
+# vi /etc/selinux/config
+# SELINUX=enforcing
+# SELINUXTYPE=targeted
 
 mkdir -p /etc/origin/master/
 touch /etc/origin/master/htpasswd
