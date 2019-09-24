@@ -102,7 +102,8 @@ wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 ls *.rpm
 yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 # Disable the EPEL repository globally so that is not accidentally used during later steps of the installation
-sed -i -e "s/^enabled=1/enabled=1" /etc/yum.repos.d/epel.repo
+
+sed -i -e "s/^enabled=1/enabled=0/" /etc/yum.repos.d/epel.repo
 sudo yum install yum-utils
 sudo yum-config-manager --enable rhui-REGION-rhel-server-extras
 sudo yum install docker
@@ -114,6 +115,7 @@ fi
 yum update -y
 # install the packages for Ansible
 yum -y --enablerepo=epel install pyOpenSSL
+
 yum update -y
 cd /tmp
 #wget https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
@@ -125,6 +127,8 @@ rpm -Uvh https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-
 ansible --version
 yum update -y
 [ ! -d openshift-ansible ] && git clone https://github.com/openshift/openshift-ansible.git -b release-${VERSION} --depth=1
+
+echo "******  openshift-ansible.git ${VERSION}  "
 
 cat <<EOD > /etc/hosts
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 
@@ -174,6 +178,7 @@ fi
 curl -o inventory.download $SCRIPT_REPO/inventory.ini
 envsubst < inventory.download > inventory.ini
 
+echo "******  inventory.download $SCRIPT_REPO/inventory.ini ${SCRIPT_REPO}  "
 # add proxy in inventory.ini if proxy variables are set
 if [ ! -z "${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}}" ]; then
 	echo >> inventory.ini
