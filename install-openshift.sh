@@ -231,7 +231,7 @@ fi
 	# Configure a Custom Wildcard Certificate for the Default Router
 	# Configure a Custom Certificate for the Image Registry
 	## See here for more explanation: https://docs.okd.io/latest/install_config/certificate_customization.html
-	
+	echo "* Your IP is ${IP} ${DOMAIN}"
 	echo "*****************************************************inventory.ini update**********************" 
 	cat <<EOT >> inventory.ini
 	
