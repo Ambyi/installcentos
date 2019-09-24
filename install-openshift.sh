@@ -268,17 +268,17 @@ mkdir -p /etc/origin/master/
 chmod 777 /etc/origin/master
 touch /etc/origin/master/htpasswd
 	echo "*****************************************************start run ansible **********************" 
-	echo  ${PWD=pwd}  ${ip}
+	echo  ${PWD=pwd}  ${IP}
 	echo "@@@@@@@@@git clone https://github.com/openshift/openshift-ansible.git###@@@@@@@@@@@"  
 	#cd /root/installcentos
-	echo  ${PWD=pwd}  ${ip}
+	echo  ${PWD=pwd}  ${IP}
 	  #git clone https://github.com/openshift/openshift-ansible.git
 	  echo "*****************************************************start run ansible **********************" 
-	echo  ${PWD=pwd} ${ip}
-	echo "* Your IP is $IP "
+	echo  ${PWD=pwd} ${IP}
+	echo "* Your IP is $IP ******${IP}***** $"
 	
-ansible-playbook -i inventory.ini openshift-ansible/playbooks/prerequisites.yml
-ansible-playbook -i inventory.ini openshift-ansible/playbooks/deploy_cluster.yml
+ansible-playbook -i inventory.ini openshift-ansible/playbooks/prerequisites.yml -vvvv
+ansible-playbook -i inventory.ini openshift-ansible/playbooks/deploy_cluster.yml -vvvv
 
 htpasswd -b /etc/origin/master/htpasswd ${USERNAME} ${PASSWORD}
 oc adm policy add-cluster-role-to-user cluster-admin ${USERNAME}
