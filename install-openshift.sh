@@ -275,6 +275,7 @@ touch /etc/origin/master/htpasswd
 	  #git clone https://github.com/openshift/openshift-ansible.git
 	  echo "*****************************************************start run ansible **********************" 
 	echo  ${PWD=pwd} ${ip}
+	echo "* Your IP is $IP "
 	
 ansible-playbook -i inventory.ini openshift-ansible/playbooks/prerequisites.yml
 ansible-playbook -i inventory.ini openshift-ansible/playbooks/deploy_cluster.yml
@@ -302,6 +303,7 @@ if [ "$PVS" = "true" ]; then
 fi
 
 echo "******"
+echo "* Your IP is $IP "
 echo "* Your console is https://console.$DOMAIN:$API_PORT"
 echo "* Your username is $USERNAME "
 echo "* Your password is $PASSWORD "
