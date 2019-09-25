@@ -10,7 +10,7 @@ export USERNAME=${USERNAME:="$(whoami)"}
 export PASSWORD=${PASSWORD:=password}
 export VERSION=${VERSION:="3.11"}
 export SCRIPT_REPO=${SCRIPT_REPO:="https://github.com/Ambyi/installcentos/blob/master"}
-export IP=${IP:="$(ip route get 8.8.8.8 | awk '{print $NF; exit}')"}
+export ip=${ip:="$(ip route get 8.8.8.8 | awk '{print $NF; exit}')"}
 export API_PORT=${API_PORT:="8443"}
 export LETSENCRYPT=${LETSENCRYPT:="false"}
 export MAIL=${MAIL:="example@email.com"}
@@ -72,7 +72,7 @@ fi
 
 echo "******"
 echo "* Your domain is $DOMAIN "
-echo "* Your IP is $IP "
+echo "* Your IP is $ip "
 echo "* Your username is $USERNAME "
 echo "* Your password is $PASSWORD "
 echo "* OpenShift version: $VERSION "
@@ -133,7 +133,7 @@ echo "******  openshift-ansible.git ${VERSION}  "
 cat <<EOD > /etc/hosts
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-${IP}		$(hostname) console console.${DOMAIN}  
+${ip}		$(hostname) console console.${DOMAIN}  
 EOD
 
 if [ -z $DISK ]; then 
@@ -159,7 +159,7 @@ systemctl enable docker
 if [ ! -f ~/.ssh/id_rsa ]; then
 	ssh-keygen -q -f ~/.ssh/id_rsa -N ""
 	cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-	ssh -o StrictHostKeyChecking=no root@$IP "pwd" < /dev/null
+	ssh -o StrictHostKeyChecking=no root@$ip "pwd" < /dev/null
 fi
 
 export METRICS="True"
@@ -197,9 +197,9 @@ if [ ! -z "${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}}" ]; then
 	echo "openshift_http_proxy=\"${HTTP_PROXY:-${http_proxy:-${HTTPS_PROXY:-${https_proxy}}}}\"" >> inventory.ini
 	echo "openshift_https_proxy=\"${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}}\"" >> inventory.ini
 	if [ ! -z "${NO_PROXY:-${no_proxy}}" ]; then
-		__no_proxy="${NO_PROXY:-${no_proxy}},${IP},.${DOMAIN}"
+		__no_proxy="${NO_PROXY:-${no_proxy}},${ip},.${DOMAIN}"
 	else
-		__no_proxy="${IP},.${DOMAIN}"
+		__no_proxy="${ip},.${DOMAIN}"
 	fi
 	echo "openshift_no_proxy=\"${__no_proxy}\"" >> inventory.ini
 	
@@ -231,7 +231,7 @@ fi
 	# Configure a Custom Wildcard Certificate for the Default Router
 	# Configure a Custom Certificate for the Image Registry
 	## See here for more explanation: https://docs.okd.io/latest/install_config/certificate_customization.html
-	echo "* Your IP is ${IP} ${DOMAIN}"
+	echo "* Your IP is ${ip} ${DOMAIN}"
 	echo "*****************************************************inventory.ini update**********************" 
 	cat <<EOT >> inventory.ini
 	
@@ -268,14 +268,14 @@ mkdir -p /etc/origin/master/
 chmod 777 /etc/origin/master
 touch /etc/origin/master/htpasswd
 	echo "*****************************************************start run ansible **********************" 
-	echo  ${PWD=pwd}  ${IP}
+	echo  ${PWD=pwd}  ${ip}
 	echo "@@@@@@@@@git clone https://github.com/openshift/openshift-ansible.git###@@@@@@@@@@@"  
 	#cd /root/installcentos
-	echo  ${PWD=pwd}  ${IP}
+	echo  ${PWD=pwd}  ${ip}
 	  #git clone https://github.com/openshift/openshift-ansible.git
 	  echo "*****************************************************start run ansible **********************" 
-	echo  ${PWD=pwd} ${IP}
-	echo "* Your IP is $IP ******${IP}***** $"
+	echo  ${PWD=pwd} ${ip}
+	echo "* Your IP is $ip ******${ip}***** $"
 	
 ansible-playbook -i inventory.ini openshift-ansible/playbooks/prerequisites.yml -vvvv
 ansible-playbook -i inventory.ini openshift-ansible/playbooks/deploy_cluster.yml -vvvv
