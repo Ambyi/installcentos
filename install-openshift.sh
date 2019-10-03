@@ -92,6 +92,7 @@ yum install -y  wget git zile nano net-tools docker-1.13.1\
 				kexec-tools sos psacct openssl-devel \
 				httpd-tools NetworkManager \
 				python-cryptography python2-pip python-devel  python-passlib \
+				python-paramiko sshpass \
 				java-1.8.0-openjdk-headless "@Development Tools"
 				
 
