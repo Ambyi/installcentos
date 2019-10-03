@@ -6,7 +6,7 @@
 export INTERACTIVE=${INTERACTIVE:="true"}
 export PVS=${INTERACTIVE:="true"}
 #export DOMAIN=${DOMAIN:="$(curl -s ipinfo.io/ip).nip.io"}
-export DOMAIN=${DOMAIN:="$(HOSTNAME)"}
+export DOMAIN=${DOMAIN:="echo $(HOSTNAME)"}
 export USERNAME=${USERNAME:="$(whoami)"}
 export PASSWORD=${PASSWORD:=password}
 export VERSION=${VERSION:="3.11"}
