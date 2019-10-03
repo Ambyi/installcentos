@@ -278,6 +278,8 @@ touch /etc/origin/master/htpasswd
 	echo  ${PWD=pwd} ${ip}
 	echo "* Your IP is $ip ******${ip}***** $"
 	
+	DOMAIN = ip-10-80-4-122.eu-west-2.compute.internal
+
 ansible-playbook -i inventory.ini openshift-ansible/playbooks/prerequisites.yml -vvvv
 ansible-playbook -i inventory.ini openshift-ansible/playbooks/deploy_cluster.yml -vvvv
 
