@@ -118,7 +118,7 @@ yum -y --enablerepo=epel install pyOpenSSL
 
 yum update -y
 cd /tmp
-#wget https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
+wget https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
 ls *.rpm
 # curl -o ansible.rpm https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
 #yum -y --enablerepo=epel install ansible.rpm
