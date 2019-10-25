@@ -111,8 +111,9 @@ ansible -m ping all
 sudo git clone https://github.com/Ambyi/docker.git
 
 
-ansible-playbook docker/install_docker_okd_shell.yml --syntax-check -vvvv
-ansible-playbook docker/install_docker_okd_shell.yml -vvvv
+#ansible-playbook docker/install_docker_okd_shell.yml --syntax-check -vvvv
+#ansible-playbook docker/install_docker_okd_shell.yml -vvvv
+ansible-playbook docker/install_docker_okd_shell.yml 
 
 if [ -z $DISK ]; then 
 	echo "Not setting the Docker storage."
