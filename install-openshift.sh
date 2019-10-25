@@ -162,7 +162,7 @@ cd /tmp
 
 sudo rm -r /tmp/inventory.ini
 
-cp /home/ec2-user/inventory.ini /tmp/inventory.ini
+cp /home/ec2-user/installcentos/inventory.ini /tmp/inventory.ini
 
 chmod 777 /tmp/inventory.ini
 
