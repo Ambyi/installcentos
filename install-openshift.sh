@@ -83,42 +83,7 @@ if [ "$LETSENCRYPT" = true ] ; then
 fi
 echo "******"
 
-# install updates
-yum update -y
 
-# install the following base packages
-yum install -y  wget git zile nano net-tools docker-1.13.1\
-				bind-utils iptables-services \
-				bridge-utils bash-completion \
-				kexec-tools sos psacct openssl-devel \
-				httpd-tools NetworkManager \
-				python-cryptography python2-pip python-devel  python-passlib \
-				python-paramiko sshpass \
-				java-1.8.0-openjdk-headless "@Development Tools"
-				
-
-#install epel
-#yum -y install epel-release
-cd /tmp
-wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-ls *.rpm
-yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-# Disable the EPEL repository globally so that is not accidentally used during later steps of the installation
-
-sed -i -e "s/^enabled=1/enabled=0/" /etc/yum.repos.d/epel.repo
-sudo yum install yum-utils
-sudo yum-config-manager --enable rhui-REGION-rhel-server-extras
-sudo yum install docker
-systemctl | grep "NetworkManager.*running" 
-if [ $? -eq 1 ]; then
-	systemctl start NetworkManager
-	systemctl enable NetworkManager
-fi
-yum update -y
-# install the packages for Ansible
-yum -y --enablerepo=epel install pyOpenSSL
-
-yum update -y
 cd /tmp
 wget https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
 ls *.rpm
@@ -131,12 +96,23 @@ yum update -y
  [ ! -d openshift-ansible ] && git clone https://github.com/openshift/openshift-ansible.git -b release-${VERSION} --depth=1
 
 echo "******  openshift-ansible.git ${VERSION}  "
-
 cat <<EOD > /etc/hosts
 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 
 ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
-${ip}		$(hostname) console console.${DOMAIN}  
+
+${ip}		$(hostname) console console.${DOMAIN}
+10.80.4.117
+10.80.4.118
 EOD
+sudo rm -r docker
+
+ansible -m ping all
+
+sudo git clone https://github.com/Ambyi/docker.git
+
+
+ansible-playbook docker/install_docker_okd_shell.yml --syntax-check -vvvv
+ansible-playbook docker/install_docker_okd_shell.yml -vvvv
 
 if [ -z $DISK ]; then 
 	echo "Not setting the Docker storage."
@@ -183,73 +159,36 @@ echo "******  inventory.download $SCRIPT_REPO/inventory.ini ${SCRIPT_REPO}  "
 # add proxy in inventory.ini if proxy variables are set
 
 cd /tmp
-# wget https://github.com/Ambyi/installcentos/blob/master/inventory.ini
-# ls *.ini
-# curl -O $SCRIPT_REPO/inventory.ini
-#envsubst < inventory.download > inventory.ini
 
 sudo rm -r /tmp/inventory.ini
 
-cp /root/installcentos/inventory.ini /tmp/inventory.ini
+cp /home/ec2-user/inventory.ini /tmp/inventory.ini
 
-echo "*** # add proxy in inventory.ini if proxy variables are set${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}}**** "
+chmod 777 /tmp/inventory.ini
 
-if [ ! -z "${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}}" ]; then
-	echo >> inventory.ini
-	echo "openshift_http_proxy=\"${HTTP_PROXY:-${http_proxy:-${HTTPS_PROXY:-${https_proxy}}}}\"" >> inventory.ini
-	echo "openshift_https_proxy=\"${HTTPS_PROXY:-${https_proxy:-${HTTP_PROXY:-${http_proxy}}}}\"" >> inventory.ini
-	if [ ! -z "${NO_PROXY:-${no_proxy}}" ]; then
-		__no_proxy="${NO_PROXY:-${no_proxy}},${ip},.${DOMAIN}"
-	else
-		__no_proxy="${ip},.${DOMAIN}"
-	fi
-	echo "openshift_no_proxy=\"${__no_proxy}\"" >> inventory.ini
-	
-	echo "******************************************************************openshift_no_proxy=\"${__no_proxy}\"" 
-fi
-
-
-
-
-# Let's Encrypt setup
-# if [ "$LETSENCRYPT" = true ] ; then
-# 	# Install CertBot
-# 	yum install --enablerepo=epel -y certbot
-
-# 	# Configure Let's Encrypt certificate
-# 	certbot certonly --manual \
-# 			--preferred-challenges dns \
-# 			--email $MAIL \
-# 			--server https://acme-v02.api.letsencrypt.org/directory \
-# 			--agree-tos \
-# 			-d $DOMAIN \
-# 			-d *.$DOMAIN \
-# 			-d *.apps.$DOMAIN
-	
-	## Modify inventory.ini 
-	# Declare usage of Custom Certificate
-	# Configure Custom Certificates for the Web Console or CLI => Doesn't Work for CLI
-	# Configure a Custom Master Host Certificate
-	# Configure a Custom Wildcard Certificate for the Default Router
-	# Configure a Custom Certificate for the Image Registry
-	## See here for more explanation: https://docs.okd.io/latest/install_config/certificate_customization.html
 	echo "* Your IP is ${ip} ${DOMAIN}"
 	echo "*****************************************************inventory.ini update**********************" 
-	cat <<EOT >> inventory.ini
+	for s in 10.80.4.117 10.80.4.118;
+do
+  cat <<EOT >> inventory.ini
+  ssh $s hostname > inventory.ini
+EOT;
+
+# 	cat <<EOT >> inventory.ini
 	
-	openshift_master_overwrite_named_certificates=true
+# 	openshift_master_overwrite_named_certificates=true
 	
-	openshift_master_cluster_hostname=console-internal.${DOMAIN}
-	openshift_master_cluster_public_hostname=console.${DOMAIN}
+# 	openshift_master_cluster_hostname=console-internal.${DOMAIN}
+# 	openshift_master_cluster_public_hostname=console.${DOMAIN}
 	
-	openshift_master_named_certificates=[{"certfile": "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem", "keyfile": "/etc/letsencrypt/live/${DOMAIN}/privkey.pem", "cafile": "/etc/letsencrypt/live/${DOMAIN}/chain.pem", "names": ["console.${DOMAIN}"]}]
+# 	openshift_master_named_certificates=[{"certfile": "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem", "keyfile": "/etc/letsencrypt/live/${DOMAIN}/privkey.pem", "cafile": "/etc/letsencrypt/live/${DOMAIN}/chain.pem", "names": ["console.${DOMAIN}"]}]
 	
-	openshift_hosted_router_certificate={"certfile": "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem", "keyfile": "/etc/letsencrypt/live/${DOMAIN}/privkey.pem", "cafile": "/etc/letsencrypt/live/${DOMAIN}/chain.pem"}
+# 	openshift_hosted_router_certificate={"certfile": "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem", "keyfile": "/etc/letsencrypt/live/${DOMAIN}/privkey.pem", "cafile": "/etc/letsencrypt/live/${DOMAIN}/chain.pem"}
 	
-	openshift_hosted_registry_routehost=registry.apps.${DOMAIN}
-	openshift_hosted_registry_routecertificates={"certfile": "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem", "keyfile": "/etc/letsencrypt/live/${DOMAIN}/privkey.pem", "cafile": "/etc/letsencrypt/live/${DOMAIN}/chain.pem"}
-	openshift_hosted_registry_routetermination=reencrypt
-EOT
+# 	openshift_hosted_registry_routehost=registry.apps.${DOMAIN}
+# 	openshift_hosted_registry_routecertificates={"certfile": "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem", "keyfile": "/etc/letsencrypt/live/${DOMAIN}/privkey.pem", "cafile": "/etc/letsencrypt/live/${DOMAIN}/chain.pem"}
+# 	openshift_hosted_registry_routetermination=reencrypt
+# EOT
 	
 	# Add Cron Task to renew certificate
 # 	echo "@weekly  certbot renew --pre-hook=\"oc scale --replicas=0 dc router\" --post-hook=\"oc scale --replicas=1 dc router\"" > certbotcron
@@ -258,53 +197,53 @@ EOT
 #fi
 
 # Checkout Origin 3.11 release 
-cd openshift-ansible && git fetch && git checkout release-3.11 && cd ..
+# cd openshift-ansible && git fetch && git checkout release-3.11 && cd ..
 # -----------------------------------------------------
 # # confirm selinux setting on Master,Compute,Infra
 # vi /etc/selinux/config
 # SELINUX=enforcing
 # SELINUXTYPE=targeted
 
-	echo "*****************************************************inventory.ini update**********************" 
-mkdir -p /etc/origin/master/
-chmod 777 /etc/origin/master
-touch /etc/origin/master/htpasswd
-	echo "*****************************************************start run ansible **********************" 
-	echo  ${PWD=pwd}  ${ip}
-	echo "@@@@@@@@@git clone https://github.com/openshift/openshift-ansible.git###@@@@@@@@@@@"  
-	#cd /root/installcentos
-	echo  ${PWD=pwd}  ${ip}
-	  #git clone https://github.com/openshift/openshift-ansible.git
-	  echo "*****************************************************start run ansible **********************" 
-	echo  ${PWD=pwd} ${ip}
-	echo "* Your IP is $ip ******${ip}***** $"
+# 	echo "*****************************************************inventory.ini update**********************" 
+# mkdir -p /etc/origin/master/
+# chmod 777 /etc/origin/master
+# touch /etc/origin/master/htpasswd
+# 	echo "*****************************************************start run ansible **********************" 
+# 	echo  ${PWD=pwd}  ${ip}
+# 	echo "@@@@@@@@@git clone https://github.com/openshift/openshift-ansible.git###@@@@@@@@@@@"  
+# 	#cd /root/installcentos
+# 	echo  ${PWD=pwd}  ${ip}
+# 	  #git clone https://github.com/openshift/openshift-ansible.git
+# 	  echo "*****************************************************start run ansible **********************" 
+# 	echo  ${PWD=pwd} ${ip}
+# 	echo "* Your IP is $ip ******${ip}***** $"
 	
-	DOMAIN = ip-10-80-4-122.eu-west-2.compute.internal
+# 	DOMAIN = ip-10-80-4-122.eu-west-2.compute.internal
 
-ansible-playbook -i inventory.ini openshift-ansible/playbooks/prerequisites.yml -vvvv
-ansible-playbook -i inventory.ini openshift-ansible/playbooks/deploy_cluster.yml -vvvv
+# ansible-playbook -i inventory.ini openshift-ansible/playbooks/prerequisites.yml -vvvv
+# ansible-playbook -i inventory.ini openshift-ansible/playbooks/deploy_cluster.yml -vvvv
 
-htpasswd -b /etc/origin/master/htpasswd ${USERNAME} ${PASSWORD}
-oc adm policy add-cluster-role-to-user cluster-admin ${USERNAME}
+# htpasswd -b /etc/origin/master/htpasswd ${USERNAME} ${PASSWORD}
+# oc adm policy add-cluster-role-to-user cluster-admin ${USERNAME}
 
-if [ "$PVS" = "true" ]; then
+# if [ "$PVS" = "true" ]; then
 
-	curl -o vol.yaml $SCRIPT_REPO/vol.yaml
+# 	curl -o vol.yaml $SCRIPT_REPO/vol.yaml
 
-	for i in `seq 1 200`;
-	do
-		DIRNAME="vol$i"
-		mkdir -p /mnt/data/$DIRNAME 
-		chcon -Rt svirt_sandbox_file_t /mnt/data/$DIRNAME
-		chmod 777 /mnt/data/$DIRNAME
+# 	for i in `seq 1 200`;
+# 	do
+# 		DIRNAME="vol$i"
+# 		mkdir -p /mnt/data/$DIRNAME 
+# 		chcon -Rt svirt_sandbox_file_t /mnt/data/$DIRNAME
+# 		chmod 777 /mnt/data/$DIRNAME
 		
-		sed "s/name: vol/name: vol$i/g" vol.yaml > oc_vol.yaml
-		sed -i "s/path: \/mnt\/data\/vol/path: \/mnt\/data\/vol$i/g" oc_vol.yaml
-		oc create -f oc_vol.yaml
-		echo "created volume $i"
-	done
-	rm oc_vol.yaml
-fi
+# 		sed "s/name: vol/name: vol$i/g" vol.yaml > oc_vol.yaml
+# 		sed -i "s/path: \/mnt\/data\/vol/path: \/mnt\/data\/vol$i/g" oc_vol.yaml
+# 		oc create -f oc_vol.yaml
+# 		echo "created volume $i"
+# 	done
+# 	rm oc_vol.yaml
+# fi
 
 echo "******"
 echo "* Your IP is $IP "
