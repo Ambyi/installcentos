@@ -132,14 +132,14 @@ else
 	docker-storage-setup
 fi
 
-systemctl restart docker
-systemctl enable docker
+# systemctl restart docker
+# systemctl enable docker
 
-if [ ! -f ~/.ssh/id_rsa ]; then
-	ssh-keygen -q -f ~/.ssh/id_rsa -N ""
-	cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
-	ssh -o StrictHostKeyChecking=no root@$ip "pwd" < /dev/null
-fi
+# if [ ! -f ~/.ssh/id_rsa ]; then
+# 	ssh-keygen -q -f ~/.ssh/id_rsa -N ""
+# 	cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+# 	ssh -o StrictHostKeyChecking=no root@$ip "pwd" < /dev/null
+# fi
 
 export METRICS="True"
 export LOGGING="True"
@@ -163,17 +163,23 @@ cd /tmp
 
 sudo rm -r /tmp/inventory.ini
 
-cp /home/ec2-user/installcentos/inventory.ini /tmp/inventory.ini
+sudo cp /home/ec2-user/installcentos/inventory.ini /tmp/inventory.ini
 
-chmod 777 /tmp/inventory.ini
+sudo chmod 777 /tmp/inventory.ini
+
+sudo touch temp.ini
 
 	echo "* Your IP is ${ip} ${DOMAIN}"
 	echo "*****************************************************inventory.ini update**********************" 
-	for s in 10.80.4.117 10.80.4.118;
+for s in 10.80.4.117 10.80.4.118;
 do
-  cat <<EOT >> inventory.ini
-  ssh $s hostname > inventory.ini
-EOT;
+  ssh $s hostname
+done > temp.ini;
+
+while read line
+do
+        echo $line  >> inventory.ini
+done < temp.ini;
 
 # 	cat <<EOT >> inventory.ini
 	
