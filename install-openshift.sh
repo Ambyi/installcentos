@@ -165,7 +165,10 @@ sudo rm -r /tmp/inventory.ini
 
 sudo cp /home/ec2-user/installcentos/inventory.ini /tmp/inventory.ini
 
-sudo chmod 777 /tmp/inventory.ini
+sudo touch temp.ini
+
+sudo chmod 777 /tmp/inventory.ini 
+sudo chmod 777 /tmp/temp.ini
 
 sudo touch temp.ini
 
