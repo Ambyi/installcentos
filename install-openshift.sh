@@ -15,7 +15,7 @@ export ip=${ip:="$(ip route get 8.8.8.8 | awk '{print $NF; exit}')"}
 export API_PORT=${API_PORT:="8443"}
 export LETSENCRYPT=${LETSENCRYPT:="false"}
 export MAIL=${MAIL:="example@email.com"}
-#export DISK=${DISK:="/var/lib/docker"}
+export DISK=${DISK:="/dev/vdc"}
 
 ## Make the script interactive to set the variables
 if [ "$INTERACTIVE" = "true" ]; then
@@ -85,6 +85,14 @@ echo "******"
 
 
 cd /tmp
+
+#the EPEL repository globally so that is not accidentally used during later steps of the installation
+wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+ls *.rpm
+yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+# Disable the EPEL repository globally so that is not accidentally used during later steps of the installation
+
+sed -i -e "s/^enabled=1/enabled=0/" /etc/yum.repos.d/epel.repo
 wget https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
 ls *.rpm
 # curl -o ansible.rpm https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
