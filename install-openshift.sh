@@ -93,11 +93,11 @@ sudo yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.
 # Disable the EPEL repository globally so that is not accidentally used during later steps of the installation
 
 sudo sed -i -e "s/^enabled=1/enabled=0/" /etc/yum.repos.d/epel.repo
-sudo wget https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
-ls *.rpm
+# sudo wget https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
+# ls *.rpm
 # curl -o ansible.rpm https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
 #yum -y --enablerepo=epel install ansible.rpm
-sudo yum remove ansible
+sudo yum -y remove ansible
 sudo rpm -Uvh https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
 ansible --version
 sudo yum update -y
