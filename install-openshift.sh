@@ -186,10 +186,16 @@ sudo rm -r /tmp/inventory.ini
 
 sudo cp /home/ec2-user/installcentos/inventory.ini /tmp/inventory.ini
 
-sudo touch temp.ini
+sudo touch tempMaster.ini
+sudo touch tempetcd.ini
+sudo touch tempinfra.ini
+sudo touch tempnodes.ini
 
 sudo chmod 777 /tmp/inventory.ini 
-sudo chmod 777 /tmp/temp.ini
+sudo chmod 777 /tmp/tempMaster.ini
+sudo chmod 777 /tmp/tempetcd.ini
+sudo chmod 777 /tmp/tempinfra.ini
+sudo chmod 777 /tmp/tempnodes.ini
 
 sudo touch temp.ini
 
@@ -198,12 +204,63 @@ sudo touch temp.ini
 for s in 10.80.4.117 10.80.4.118;
 do
   ssh $s hostname
-done > temp.ini;
+done > tempMaster.ini;
+
+for s in 10.80.4.117 10.80.4.118;
+do
+  ssh $s hostname
+done > tempetcd.ini;
+
+for s in 10.80.4.117 10.80.4.118;
+do
+  ssh $s hostname
+done > tempinfra.ini;
+
+for s in 10.80.4.117 10.80.4.118;
+do
+  ssh $s hostname
+done > tempnodes.ini;
+
+
+#### Write inventory file 
+
 
 while read line
 do
-        echo $line  >> inventory.ini
-done < temp.ini;
+        echo $line  >> tempMaster.ini
+done < inventory.ini;
+
+##### host group for etcd ####
+#[etcd]
+
+cat echo "##### host group for etcd ####" < inventory.ini
+cat echo "[etcd]" < inventory.ini
+
+while read line
+do
+        echo $line  >> tempetcd.ini
+done < inventory.ini;
+
+##### host group for infra ####
+#[infra]
+cat echo "##### host group for infra ####" < inventory.ini
+cat echo "[infra]" < inventory.ini
+
+while read line
+do
+        echo $line  >> tempinfra.ini
+done < inventory.ini;
+
+#### host group for nodes, includes region info
+#[nodes]
+
+cat echo "##### host group for nodes ####" < inventory.ini
+cat echo "[nodes]" < inventory.ini
+
+while read line
+do
+        echo "$line    openshift_node_group_name='node-config-master'"  >> tempnodes.ini
+done < inventory.ini;
 
 # 	cat <<EOT >> inventory.ini
 	
