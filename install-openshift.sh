@@ -100,18 +100,24 @@ sudo sed -i -e "s/^enabled=1/enabled=0/" /etc/yum.repos.d/epel.repo
 sudo yum -y remove ansible
 sudo rpm -Uvh https://releases.ansible.com/ansible/rpm/release/epel-7-x86_64/ansible-2.8.5-1.el7.ans.noarch.rpm
 ansible --version
-sudo yum update -y
- [ ! -d openshift-ansible ] && git clone https://github.com/openshift/openshift-ansible.git -b release-${VERSION} --depth=1
+#sudo yum update -y
+# [ ! -d openshift-ansible ] && git clone https://github.com/openshift/openshift-ansible.git -b release-${VERSION} --depth=1
 
 echo "******  openshift-ansible.git ${VERSION}  "
-sudo cat <<EOD > /etc/hosts
-127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 
-::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
 
-${ip}		$(hostname) console console.${DOMAIN}
-10.80.4.117
-10.80.4.118
-EOD
+for s in 10.80.4.122 10.80.4.117 10.80.4.118;
+do
+  ssh $s 
+done > /etc/ansible/hosts
+
+# sudo cat <<EOD > /etc/hosts
+# 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 
+# ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
+
+# ${ip}		$(hostname) console console.${DOMAIN}
+# 10.80.4.117
+# 10.80.4.118
+# EOD
 sudo rm -r docker
 
 ansible -m ping all
@@ -274,4 +280,4 @@ echo "*"
 echo "$ oc login -u ${USERNAME} -p ${PASSWORD} https://console.$DOMAIN:$API_PORT/"
 echo "******"
 
-oc login -u ${USERNAME} -p ${PASSWORD} https://console.$DOMAIN:$API_PORT/
+#oc login -u ${USERNAME} -p ${PASSWORD} https://console.$DOMAIN:$API_PORT/
