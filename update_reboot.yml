@@ -9,7 +9,15 @@
       insertafter: 'EOF'
       block: |
         SELINUX=permissiv
+  - name: Insert setting the selinux/config
+    blockinfile:
+      path: /etc/ansible/ansible.cfg
+      insertafter: 'EOF'
+      block: |
+        command_warnings=False
   - name:  yum update os rhel
     shell: yum update -y
+    warn: false
+    #command_warnings=False
   # - name: reboot the instance
   #   shell: sudo init 6
