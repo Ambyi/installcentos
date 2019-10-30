@@ -6,4 +6,4 @@
   - name:  yum update os rhel
     shell: yum update -y
   - name: reboot the instance
-    shell: sudo reboot
+    shell: sudo init 6
