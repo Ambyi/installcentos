@@ -1,0 +1,16 @@
+---
+- hosts: all
+  user: ec2-user
+  become: yes
+  tasks:
+  # - name: Insert setting the selinux/config
+  #   blockinfile:
+  #     path: /etc/selinux/config
+  #     insertafter: 'EOF'
+  #     block: |
+  #       SELINUX=enforcing
+  #       SELINUXTYPE=targeted
+  # - name:  yum update os rhel
+  #   shell: yum update -y
+  - name: reboot the instance
+    shell: sudo init 6
