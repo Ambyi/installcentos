@@ -108,7 +108,7 @@ sudo chmod 777 /etc/ansible/hosts
 for s in  10.80.4.120  10.80.4.121  10.80.4.108  10.80.4.69  10.80.4.75  10.80.4.71 10.80.4.113  10.80.4.126  10.80.4.96  10.80.4.77  10.80.4.95  10.80.4.122;
 do
    echo $s 
-done > /etc/ansible/hosts
+done > /etc/ansible/hosts;
 
 # Generate SSH Key on master machine and copy key on Compute and Infra
 # ssh-keygen
