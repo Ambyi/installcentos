@@ -7,8 +7,8 @@
   #   shell: subscription-manager register --username=ec2-user --password=ec2-user
   - name: "Disable all the enabled RHSM repositories:"
     shell: sudo yum repolist disabled
-  - name: "enable the redhat-rhui.repo"
-    shell: sudo  yum-config-manager --enable /etc/yum.repos.d/redhat-rhui.repo    
+  # - name: "enable the redhat-rhui.repo"
+  #   shell: sudo  yum-config-manager --enable /etc/yum.repos.d/redhat-rhui.repo    
   - name: "Configring rpm"
     shell: sudo yum-config-manager --enable "Red Hat Enterprise Linux Server 7 Extra(RPMs)"   
   - name: "Configring tools"
