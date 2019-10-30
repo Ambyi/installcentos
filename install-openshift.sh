@@ -135,8 +135,7 @@ ansible -m ping all
 # ansible-playbook docker/install_docker_okd_shell.yml --syntax-check -vvvv
 # ansible-playbook docker/install_docker_okd_shell.yml -vvvv
 #ansible-playbook docker/install_docker_okd_shell.yml 
-ansible-playbook installcentos/update_reboot.yml --syntax-check -vvvv
-ansible-playbook installcentos/update_reboot.yml 
+
 
 
 ansible-playbook installcentos/install_docker_okd_shell.yml --syntax-check -vvvv
@@ -350,8 +349,8 @@ done < tempnodes.ini;
 # fi
 
 echo "******"
-ansible-playbook installcentos/init.yml --syntax-check -vvvv
-ansible-playbook installcentos/inti.yml -vvvv
+ansible-playbook installcentos/update_reboot.yml --syntax-check -vvvv
+ansible-playbook installcentos/update_reboot.yml 
 # echo "* Your IP is $IP "
 # echo "* Your console is https://console.$DOMAIN:$API_PORT"
 # echo "* Your username is $USERNAME "
