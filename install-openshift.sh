@@ -138,8 +138,8 @@ ansible -m ping all
 
 
 
-ansible-playbook installcentos/install_docker_okd_shell.yml --syntax-check -vvvv
-ansible-playbook installcentos/install_docker_okd_shell.yml 
+  ansible-playbook installcentos/install_docker_okd_shell.yml --syntax-check -vvvv
+  ansible-playbook installcentos/install_docker_okd_shell.yml 
 
 
 
