@@ -8,8 +8,7 @@
       path: /etc/selinux/config
       insertafter: 'EOF'
       block: |
-        SELINUX=enforcing
-        SELINUXTYPE=targeted
+        SELINUX=permissiv
   - name:  yum update os rhel
     shell: yum update -y
   # - name: reboot the instance
