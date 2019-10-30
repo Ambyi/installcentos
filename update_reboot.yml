@@ -3,13 +3,13 @@
   user: ec2-user
   become: yes
   tasks:
-  - name: Insert setting the selinux/config
-    blockinfile:
-      path: /etc/selinux/config
-      insertafter: 'EOF'
-      block: |
-        SELINUX=permissiv
-  - name: Insert setting the selinux/config
+  # - name: Insert setting the selinux/config
+  #   blockinfile:
+  #     path: /etc/selinux/config
+  #     insertafter: 'EOF'
+  #     block: |
+  #       SELINUX=permissiv
+  - name: Insert setting the ansible/config
     blockinfile:
       path: /etc/ansible/ansible.cfg
       insertafter: 'EOF'
@@ -19,5 +19,5 @@
     shell: yum update -y
     warn: false
     #command_warnings=False
-  # - name: reboot the instance
-  #   shell: sudo init 6
+  - name: reboot the instance
+    shell: sudo init 6
