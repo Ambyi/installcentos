@@ -18,11 +18,11 @@ export MAIL=${MAIL:="example@email.com"}
 export DISK=${DISK:="/dev/vdc"}
 
 ## Make the script interactive to set the variables
-# if [ "$INTERACTIVE" = "true" ]; then
-# 	read -rp "Domain to use: ($DOMAIN): " choice;
-# 	if [ "$choice" != "" ] ; then
-# 		export DOMAIN="$choice";
-# 	fi
+if [ "$INTERACTIVE" = "true" ]; then
+	read -rp "Domain to use: ($DOMAIN): " choice;
+	if [ "$choice" != "" ] ; then
+		export DOMAIN="$choice";
+	fi
 
 # 	read -rp "Username: ($USERNAME): " choice;
 # 	if [ "$choice" != "" ] ; then
@@ -48,26 +48,26 @@ export DISK=${DISK:="/dev/vdc"}
 # 		export API_PORT="$choice";
 # 	fi 
 
-	echo "Do you wish to enable HTTPS with Let's Encrypt?"
-	echo "Warnings: " 
-	echo "  Let's Encrypt only works if the IP is using publicly accessible IP and custom certificates."
-	echo "  This feature doesn't work with OpenShift CLI for now."
-	select yn in "Yes" "No"; do
-		case $yn in
-			Yes) export LETSENCRYPT=true; break;;
-			No) export LETSENCRYPT=false; break;;
-			*) echo "Please select Yes or No.";;
-		esac
-	done
+# 	echo "Do you wish to enable HTTPS with Let's Encrypt?"
+# 	echo "Warnings: " 
+# 	echo "  Let's Encrypt only works if the IP is using publicly accessible IP and custom certificates."
+# 	echo "  This feature doesn't work with OpenShift CLI for now."
+# 	select yn in "Yes" "No"; do
+# 		case $yn in
+# 			Yes) export LETSENCRYPT=true; break;;
+# 			No) export LETSENCRYPT=false; break;;
+# 			*) echo "Please select Yes or No.";;
+# 		esac
+# 	done
 	
-	if [ "$LETSENCRYPT" = true ] ; then
-		read -rp "Email(required for Let's Encrypt): ($MAIL): " choice;
-		if [ "$choice" != "" ] ; then
-			export MAIL="$choice";
-		fi
-	fi
+# 	if [ "$LETSENCRYPT" = true ] ; then
+# 		read -rp "Email(required for Let's Encrypt): ($MAIL): " choice;
+# 		if [ "$choice" != "" ] ; then
+# 			export MAIL="$choice";
+# 		fi
+# 	fi
 	
-	echo
+# 	echo
 
 fi
 
