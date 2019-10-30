@@ -104,7 +104,7 @@ ansible --version
 # [ ! -d openshift-ansible ] && git clone https://github.com/openshift/openshift-ansible.git -b release-${VERSION} --depth=1
 
 echo "******  openshift-ansible.git ${VERSION}  "
-
+sudo chmod ec2-user /etc/ansible/hosts 
 for s in 10.80.4.122 10.80.4.117 10.80.4.118;
 do
    echo $s 
