@@ -183,6 +183,9 @@ echo "******  inventory.download $SCRIPT_REPO/inventory.ini ${SCRIPT_REPO}  "
 cd /tmp
 
 sudo rm -r /tmp/inventory.ini
+sudo rm -r /tmp/tempMaster.ini
+sudo rm -r /tmp/tempetcd.ini
+sudo rm -r /tmp/tempnodes.ini
 
 sudo cp /home/ec2-user/installcentos/inventory.ini /tmp/inventory.ini
 
@@ -233,8 +236,10 @@ done < inventory.ini;
 ##### host group for etcd ####
 #[etcd]
 
-cat echo "##### host group for etcd ####" < inventory.ini
-cat echo "[etcd]" < inventory.ini
+cat <<EOD > inventory.ini
+##### host group for etcd ####
+[etcd]
+EOD
 
 while read line
 do
@@ -243,8 +248,10 @@ done < inventory.ini;
 
 ##### host group for infra ####
 #[infra]
-cat echo "##### host group for infra ####" < inventory.ini
-cat echo "[infra]" < inventory.ini
+cat <<EOD > inventory.ini
+##### host group for infra ####
+[infra]
+EOD
 
 while read line
 do
@@ -253,9 +260,10 @@ done < inventory.ini;
 
 #### host group for nodes, includes region info
 #[nodes]
-
-cat echo "##### host group for nodes ####" < inventory.ini
-cat echo "[nodes]" < inventory.ini
+cat <<EOD > inventory.ini
+##### host group for nodes #### 
+[nodes]
+EOD
 
 while read line
 do
