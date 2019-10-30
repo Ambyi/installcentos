@@ -110,6 +110,13 @@ do
    echo $s 
 done > /etc/ansible/hosts
 
+# Generate SSH Key on master machine and copy key on Compute and Infra
+# ssh-keygen
+# for host in 10.80.4.117  \
+#             10.80.4.118; \
+#       do ssh-copy-id -i ~/.ssh/id_rsa.pub $host; \
+# done
+# cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 # sudo cat <<EOD > /etc/hosts
 # 127.0.0.1   localhost localhost.localdomain localhost4 localhost4.localdomain4 
 # ::1         localhost localhost.localdomain localhost6 localhost6.localdomain6
