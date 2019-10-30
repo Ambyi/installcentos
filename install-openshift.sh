@@ -236,10 +236,10 @@ done < inventory.ini;
 ##### host group for etcd ####
 #[etcd]
 
-cat <<EOD > inventory.ini
+cat <<EOT > inventory.ini
 ##### host group for etcd ####
 [etcd]
-EOD
+EOT
 
 while read line
 do
@@ -248,10 +248,10 @@ done < inventory.ini;
 
 ##### host group for infra ####
 #[infra]
-cat <<EOD > inventory.ini
+cat <<EOT > inventory.ini
 ##### host group for infra ####
 [infra]
-EOD
+EOT
 
 while read line
 do
@@ -260,10 +260,10 @@ done < inventory.ini;
 
 #### host group for nodes, includes region info
 #[nodes]
-cat <<EOD > inventory.ini
+cat <<EOT > inventory.ini
 ##### host group for nodes #### 
 [nodes]
-EOD
+EOT
 
 while read line
 do
