@@ -230,45 +230,45 @@ done > tempnodes.ini;
 
 while read line
 do
-        echo $line  >> tempMaster.ini
-done < inventory.ini;
+        echo $line  >> inventory.ini
+done < tempMaster.ini;
 
 ##### host group for etcd ####
 #[etcd]
 
-cat <<EOT > inventory.ini
+cat <<EOT >> inventory.ini
 ##### host group for etcd ####
 [etcd]
 EOT
 
 while read line
 do
-        echo $line  >> tempetcd.ini
-done < inventory.ini;
+        echo $line  >> inventory.ini
+done < tempetcd.ini;
 
 ##### host group for infra ####
 #[infra]
-cat <<EOT > inventory.ini
+cat <<EOT >> inventory.ini
 ##### host group for infra ####
 [infra]
 EOT
 
 while read line
 do
-        echo $line  >> tempinfra.ini
-done < inventory.ini;
+        echo $line  >> inventory.ini
+done < tempinfra.ini;
 
 #### host group for nodes, includes region info
 #[nodes]
-cat <<EOT > inventory.ini
+cat <<EOT >> inventory.ini
 ##### host group for nodes #### 
 [nodes]
 EOT
 
 while read line
 do
-        echo "$line    openshift_node_group_name='node-config-master'"  >> tempnodes.ini
-done < inventory.ini;
+        echo "$line    openshift_node_group_name='node-config-master'"  >> inventory.ini
+done < tempnodes.ini;
 
 # 	cat <<EOT >> inventory.ini
 	
