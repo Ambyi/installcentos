@@ -18,35 +18,35 @@ export MAIL=${MAIL:="example@email.com"}
 export DISK=${DISK:="/dev/vdc"}
 
 ## Make the script interactive to set the variables
-if [ "$INTERACTIVE" = "true" ]; then
-	read -rp "Domain to use: ($DOMAIN): " choice;
-	if [ "$choice" != "" ] ; then
-		export DOMAIN="$choice";
-	fi
+# if [ "$INTERACTIVE" = "true" ]; then
+# 	read -rp "Domain to use: ($DOMAIN): " choice;
+# 	if [ "$choice" != "" ] ; then
+# 		export DOMAIN="$choice";
+# 	fi
 
-	read -rp "Username: ($USERNAME): " choice;
-	if [ "$choice" != "" ] ; then
-		export USERNAME="$choice";
-	fi
+# 	read -rp "Username: ($USERNAME): " choice;
+# 	if [ "$choice" != "" ] ; then
+# 		export USERNAME="$choice";
+# 	fi
 
-	read -rp "Password: ($PASSWORD): " choice;
-	if [ "$choice" != "" ] ; then
-		export PASSWORD="$choice";
-	fi
+# 	read -rp "Password: ($PASSWORD): " choice;
+# 	if [ "$choice" != "" ] ; then
+# 		export PASSWORD="$choice";
+# 	fi
 
-	read -rp "OpenShift Version: ($VERSION): " choice;
-	if [ "$choice" != "" ] ; then
-		export VERSION="$choice";
-	fi
-	read -rp "IP: ($IP): " choice;
-	if [ "$choice" != "" ] ; then
-		export IP="$choice";
-	fi
+# 	read -rp "OpenShift Version: ($VERSION): " choice;
+# 	if [ "$choice" != "" ] ; then
+# 		export VERSION="$choice";
+# 	fi
+# 	read -rp "IP: ($IP): " choice;
+# 	if [ "$choice" != "" ] ; then
+# 		export IP="$choice";
+# 	fi
 
-	read -rp "API Port: ($API_PORT): " choice;
-	if [ "$choice" != "" ] ; then
-		export API_PORT="$choice";
-	fi 
+# 	read -rp "API Port: ($API_PORT): " choice;
+# 	if [ "$choice" != "" ] ; then
+# 		export API_PORT="$choice";
+# 	fi 
 
 	echo "Do you wish to enable HTTPS with Let's Encrypt?"
 	echo "Warnings: " 
@@ -72,15 +72,15 @@ if [ "$INTERACTIVE" = "true" ]; then
 fi
 
 echo "******"
-echo "* Your domain is $DOMAIN "
-echo "* Your IP is $ip "
-echo "* Your username is $USERNAME "
-echo "* Your password is $PASSWORD "
-echo "* OpenShift version: $VERSION "
-echo "* Enable HTTPS with Let's Encrypt: $LETSENCRYPT "
-if [ "$LETSENCRYPT" = true ] ; then
-	echo "* Your email is $MAIL "
-fi
+# echo "* Your domain is $DOMAIN "
+# echo "* Your IP is $ip "
+# echo "* Your username is $USERNAME "
+# echo "* Your password is $PASSWORD "
+# echo "* OpenShift version: $VERSION "
+# echo "* Enable HTTPS with Let's Encrypt: $LETSENCRYPT "
+# if [ "$LETSENCRYPT" = true ] ; then
+# 	echo "* Your email is $MAIL "
+# fi
 echo "******"
 
 
@@ -277,14 +277,14 @@ done < temp.ini;
 # fi
 
 echo "******"
-echo "* Your IP is $IP "
-echo "* Your console is https://console.$DOMAIN:$API_PORT"
-echo "* Your username is $USERNAME "
-echo "* Your password is $PASSWORD "
-echo "*"
-echo "* Login using:"
-echo "*"
-echo "$ oc login -u ${USERNAME} -p ${PASSWORD} https://console.$DOMAIN:$API_PORT/"
+# echo "* Your IP is $IP "
+# echo "* Your console is https://console.$DOMAIN:$API_PORT"
+# echo "* Your username is $USERNAME "
+# echo "* Your password is $PASSWORD "
+# echo "*"
+# echo "* Login using:"
+# echo "*"
+# echo "$ oc login -u ${USERNAME} -p ${PASSWORD} https://console.$DOMAIN:$API_PORT/"
 echo "******"
 
 #oc login -u ${USERNAME} -p ${PASSWORD} https://console.$DOMAIN:$API_PORT/
