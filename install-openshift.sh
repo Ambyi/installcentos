@@ -105,7 +105,7 @@ ansible --version
 
 echo "******  openshift-ansible.git ${VERSION}  "
 sudo chmod 777 /etc/ansible/hosts 
-for s in 10.80.4.122 10.80.4.117 10.80.4.118;
+for s in  10.80.4.117 10.80.4.118 10.80.4.122;
 do
    echo $s 
 done > /etc/ansible/hosts
@@ -125,9 +125,9 @@ ansible -m ping all
 sudo git clone https://github.com/Ambyi/docker.git
 
 
-#ansible-playbook docker/install_docker_okd_shell.yml --syntax-check -vvvv
-#ansible-playbook docker/install_docker_okd_shell.yml -vvvv
-ansible-playbook docker/install_docker_okd_shell.yml 
+ansible-playbook docker/install_docker_okd_shell.yml --syntax-check -vvvv
+ansible-playbook docker/install_docker_okd_shell.yml -vvvv
+#ansible-playbook docker/install_docker_okd_shell.yml 
 
 if [ -z $DISK ]; then 
 	echo "Not setting the Docker storage."
