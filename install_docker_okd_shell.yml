@@ -11,13 +11,12 @@
     shell: sudo  yum-config-manager --enable /etc/yum.repos.d/redhat-rhui.repo    
   - name: "Configring rpm"
     shell: sudo yum-config-manager --enable "Red Hat Enterprise Linux Server 7 Extra(RPMs)"   
-  # - name: Insert setting the selinux/config
-  #   blockinfile:
-  #     path: /etc/selinux/config
-  #     insertafter: 'EOF'
-  #     block: |
-  #       SELINUX=enforcing
-  #       SELINUXTYPE=targeted
+  - name: Insert setting the selinux/config
+    blockinfile:
+      path: /etc/selinux/config
+      insertafter: 'EOF'
+      block: |
+        SELINUX=permissiv
   - name: "Configring tools"
     shell: | 
      yum -y install wget git net-tools\
