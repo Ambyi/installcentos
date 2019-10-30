@@ -105,7 +105,7 @@ ansible --version
 
 echo "******  openshift-ansible.git ${VERSION}  "
 sudo chmod 777 /etc/ansible/hosts 
-for s in  10.80.4.117 10.80.4.118 10.80.4.122;
+for s in  10.80.4.120  10.80.4.121  10.80.4.108  10.80.4.69  10.80.4.75  10.80.4.71 10.80.4.113  10.80.4.126  10.80.4.96  10.80.4.77  10.80.4.95  10.80.4.122;
 do
    echo $s 
 done > /etc/ansible/hosts
@@ -125,16 +125,24 @@ done > /etc/ansible/hosts
 # 10.80.4.117
 # 10.80.4.118
 # EOD
-sudo rm -r docker
+# sudo rm -r docker
 
 ansible -m ping all
 
-sudo git clone https://github.com/Ambyi/docker.git
+# sudo git clone https://github.com/Ambyi/docker.git
 
 
-ansible-playbook docker/install_docker_okd_shell.yml --syntax-check -vvvv
-ansible-playbook docker/install_docker_okd_shell.yml -vvvv
+# ansible-playbook docker/install_docker_okd_shell.yml --syntax-check -vvvv
+# ansible-playbook docker/install_docker_okd_shell.yml -vvvv
 #ansible-playbook docker/install_docker_okd_shell.yml 
+ansible-playbook installcentos/update_reboot.yml --syntax-check -vvvv
+ansible-playbook installcentos/update_reboot.yml -vvvv
+
+
+ansible-playbook installcentos/install_docker_okd_shell.yml --syntax-check -vvvv
+ansible-playbook installcentos/install_docker_okd_shell.yml -vvvv
+
+
 
 if [ -z $DISK ]; then 
 	echo "Not setting the Docker storage."
@@ -204,22 +212,22 @@ sudo touch temp.ini
 
 	echo "* Your IP is ${ip} ${DOMAIN}"
 	echo "*****************************************************inventory.ini update**********************" 
-for s in 10.80.4.117 10.80.4.118;
+for s in 10.80.4.120  10.80.4.121  10.80.4.108;
 do
   ssh $s hostname
 done > tempMaster.ini;
 
-for s in 10.80.4.117 10.80.4.118;
+for s in 10.80.4.120  10.80.4.121  10.80.4.108;
 do
   ssh $s hostname
 done > tempetcd.ini;
 
-for s in 10.80.4.117 10.80.4.118;
+for s in 10.80.4.69  10.80.4.75  10.80.4.71;
 do
   ssh $s hostname
 done > tempinfra.ini;
 
-for s in 10.80.4.117 10.80.4.118;
+for s in 10.80.4.113  10.80.4.126  10.80.4.96  10.80.4.77  10.80.4.95  10.80.4.122;
 do
   ssh $s hostname
 done > tempnodes.ini;
@@ -342,6 +350,8 @@ done < tempnodes.ini;
 # fi
 
 echo "******"
+ansible-playbook installcentos/init.yml --syntax-check -vvvv
+ansible-playbook installcentos/inti.yml -vvvv
 # echo "* Your IP is $IP "
 # echo "* Your console is https://console.$DOMAIN:$API_PORT"
 # echo "* Your username is $USERNAME "
