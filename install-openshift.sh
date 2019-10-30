@@ -107,7 +107,7 @@ echo "******  openshift-ansible.git ${VERSION}  "
 
 for s in 10.80.4.122 10.80.4.117 10.80.4.118;
 do
-   $s 
+   echo $s 
 done > /etc/ansible/hosts
 
 # sudo cat <<EOD > /etc/hosts
